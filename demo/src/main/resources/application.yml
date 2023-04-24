@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: douyin
+  datasource:
+    username: heiren
+    password: eEderF8fPH6ACrek
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://bt.vacant.zone:3306/heiren?useSSL=false
+#mybatis-plus:

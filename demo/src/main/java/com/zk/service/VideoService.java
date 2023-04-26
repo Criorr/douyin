@@ -1,5 +1,6 @@
 package com.zk.service;
 
+import com.zk.dto.Result;
 import com.zk.pojo.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface VideoService extends IService<Video> {
 
+    Result feed(String userId, String latestTime);
 }

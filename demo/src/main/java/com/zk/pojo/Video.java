@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -40,11 +42,13 @@ public class Video implements Serializable {
     /**
      * 视频地址
      */
+    @JsonProperty("play_url")
     private String playUrl;
 
     /**
      * 视频第一帧图片地址
      */
+    @JsonProperty("cover_url")
     private String coverUrl;
 
     /**
@@ -64,5 +68,32 @@ public class Video implements Serializable {
     @TableLogic
     private Integer deleted;
 
+    /**
+     * 作者信息
+     */
+    @JsonProperty("author")
+    @TableField(exist = false)
+    private User user;
+
+    /**
+     *  喜欢数
+     */
+    @TableField(exist = false)
+    @JsonProperty("favorite_count")
+    private Integer favoriteCount;
+
+    /**
+     *  评论数
+     */
+    @TableField(exist = false)
+    @JsonProperty("comment_count")
+    private Integer commentCount;
+
+    /**
+     *  是否点赞
+     */
+    @TableField(exist = false)
+    @JsonProperty("is_favorite")
+    private Boolean isFavorite;
 
 }

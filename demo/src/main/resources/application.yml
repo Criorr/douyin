@@ -9,4 +9,12 @@ spring:
     password: eEderF8fPH6ACrek
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://bt.vacant.zone:3306/heiren?useSSL=false
-#mybatis-plus:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+logging:
+  level:
+    root: warn
+    com.zk: trace
+#  pattern:
+#    console: '%p%m%n'

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -35,6 +37,7 @@ public class User implements Serializable {
     /**
      * 用户名
      */
+    @JsonProperty("name")
     private String username;
 
     /**
@@ -55,6 +58,7 @@ public class User implements Serializable {
     /**
      * 用户首页背景图
      */
+    @JsonProperty("background_image")
     private String backgroundImage;
 
     /**
@@ -73,6 +77,45 @@ public class User implements Serializable {
      */
     @TableLogic
     private Integer deleted;
+
+    /**
+     * 关注总数
+     */
+    @JsonProperty("follow_count")
+    @TableField(exist = false)
+    private Integer followCount;
+
+    /**
+     * 粉丝总数
+     */
+    @JsonProperty("follower_count")
+    @TableField(exist = false)
+    private Integer followerCount;
+
+    /**
+     * 是否关注
+     */
+    @JsonProperty("is_follow")
+    @TableField(exist = false)
+    private boolean isFollow;
+
+
+    /**
+     * 作品数
+     */
+    @JsonProperty("work_count")
+    @TableField(exist = false)
+    private Integer workCount;
+
+
+    /**
+     * 喜欢数
+     */
+    @JsonProperty("favorite_count")
+    @TableField(exist = false)
+    private Integer favoriteCount;
+
+
 
 
 }

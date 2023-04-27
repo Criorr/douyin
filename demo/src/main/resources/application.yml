@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8000
 
 spring:
   application:
@@ -16,5 +16,8 @@ logging:
   level:
     root: warn
     com.zk: trace
-#  pattern:
-#    console: '%p%m%n'
+mybatis-plus:
+      global-config:
+        db-config:
+          logic-delete-value: 1  #逻辑删除 1删除 0未删除
+          logic-not-delete-value: 0

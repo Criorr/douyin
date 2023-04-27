@@ -69,7 +69,7 @@ public class JWTUtils {
      */
     public static String getMemberIdByJwtToken(String token){
         if (StringUtils.isEmpty(token)){
-            return "";
+            return "0";
         }
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
         Claims body = claimsJws.getBody();

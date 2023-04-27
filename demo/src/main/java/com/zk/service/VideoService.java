@@ -15,4 +15,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface VideoService extends IService<Video> {
 
     Result feed(String userId, String latestTime);
+
+    Result listByUserId(Integer userId, Integer curUserId);
+
+    Result favoriteList(Integer curUserId, int i);
 }

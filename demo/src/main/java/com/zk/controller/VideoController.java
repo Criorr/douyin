@@ -53,5 +53,13 @@ public class VideoController {
         return videoService.feed(userId, latestTime);
     }
 
+
+    @GetMapping("/publish/list")
+    public Result list(@RequestParam(value = "user_id") String userId,
+                       @RequestParam(value = "token") String token) {
+        Integer curUserId = Integer.parseInt(JWTUtils.getMemberIdByJwtToken(token));
+        return videoService.listByUserId(Integer.parseInt(userId), curUserId);
+    }
+
 }
 

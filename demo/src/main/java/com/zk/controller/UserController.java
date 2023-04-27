@@ -68,7 +68,17 @@ public class UserController {
     public Result userInfo(@RequestParam("user_id") Integer userId) {
         System.out.println(userId);
         User user = userService.getById(userId);
-        // TODO 用户主页信息
+        // TODO 数据从redis中获取
+        //粉丝数
+        user.setFollowerCount(1);
+        //喜欢数
+        user.setFavoriteCount(1);
+        //关注数
+        user.setFollowCount(1);
+        //作品数
+        user.setWorkCount(1);
+        // 是否关注
+        user.setFollow(true);
         return Result.ok("user", user);
     }
 

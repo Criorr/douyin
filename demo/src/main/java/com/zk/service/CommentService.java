@@ -1,7 +1,9 @@
 package com.zk.service;
 
+import com.zk.dto.Result;
 import com.zk.pojo.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zk.utils.InterceptJWT;
 
 /**
  * <p>
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CommentService extends IService<Comment> {
 
+    Result commentList(Integer userId, Integer videoId);
+
+    Result commentAction(Integer userId, String videoId, String actionType, String commentText, String commentId);
 }

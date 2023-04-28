@@ -43,13 +43,16 @@ public class Message implements Serializable {
     /**
      * 发送者id
      */
+    @JsonProperty("from_user_id")
     private Integer fromUserId;
 
     /**
      * 接受者id
      */
+    @JsonProperty("to_user_id")
     private Integer toUserId;
     @TableField(fill = FieldFill.INSERT)
+//    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = " yyyy-MM-dd HH:MM:ss")
     private Date createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
@@ -60,6 +63,8 @@ public class Message implements Serializable {
      */
     @TableLogic
     private Integer deleted;
+
+    private long create_time;
 
 
 }

@@ -1,5 +1,6 @@
 package com.zk.service;
 
+import com.zk.dto.Result;
 import com.zk.pojo.Follow;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface FollowService extends IService<Follow> {
 
+    Result relationAction(Integer userId, Integer toUserId, String actionType);
+
+    Result followList(Integer curUserId, Integer userId);
+
+    Result followerList(Integer curUserId, Integer userId);
+
+    Result friendList(Integer curUserId, Integer userId);
 }

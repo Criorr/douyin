@@ -48,7 +48,7 @@ public class Follow implements Serializable {
     /**
      * 逻辑删除
      */
-    @TableLogic
+//    @TableLogic
     private Integer deleted;
 
 

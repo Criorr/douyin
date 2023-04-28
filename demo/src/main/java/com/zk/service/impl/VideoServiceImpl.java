@@ -12,15 +12,18 @@ import com.zk.pojo.Favorite;
 import com.zk.pojo.User;
 import com.zk.pojo.Video;
 import com.zk.mapper.VideoMapper;
+import com.zk.service.CommentService;
 import com.zk.service.FavoriteService;
 import com.zk.service.UserService;
 import com.zk.service.VideoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -36,9 +39,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Resource
     VideoMapper videoMapper;
     @Resource
+    @Lazy
     UserService userService;
     @Resource
     FavoriteService favoriteService;
+    @Resource
+    CommentService commentService;
 
     @Override
     public Result feed(String curUserId, String latestTime) {
@@ -48,7 +54,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         QueryWrapper<Video> wrapper = new QueryWrapper<>();
         wrapper.apply("UNIX_TIMESTAMP(create_time) < "+ latestTime )
                 .orderByDesc("create_time");
-        Page<Video> page = new Page<>(1,1);
+        Page<Video> page = new Page<>(1,30);
         Page<Video> videoPage = videoMapper.selectPage(page, wrapper);
         List<Video> records = videoPage.getRecords();
 
@@ -74,12 +80,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     @Override
     public Result favoriteList(Integer curUserId, int userId) {
-        List<Favorite> favoriteList = favoriteService.query()
-                .eq("user_id", userId).list();
-        List<Video> videoList = new ArrayList<>(favoriteList.size());
-        for (Favorite favorite : favoriteList) {
-            videoList.add(getById(favorite.getVideoId()));
-        }
+        List<Integer> videoIds = favoriteService.query()
+                .eq("user_id", userId).list()
+                .stream().map(Favorite::getVideoId)
+                .collect(Collectors.toList());
+
+        List<Video> videoList = query().in("id",videoIds).list();
         for (Video video : videoList) {
             setVideoPramByVid(video, userId, curUserId);
         }
@@ -89,27 +95,18 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     public void setVideoPramByVid(Video video, Integer userId, Integer curUserId) {
         User user = userService.getById(video.getUserId());
-        videoWithUser(user, userId, curUserId);
+        userService.userInfo(user, userId, curUserId);
         // TODO 数据从redis中取 此处使用的虚假数据  将视频一id 时间戳存入Zset
         video.setUser(user);
         // 视频评论数
-        video.setCommentCount(100);
+        video.setCommentCount(commentService.query().eq("video_id",video.getId()).count());
         // 视频点赞数
-        video.setFavoriteCount(100);
+        video.setFavoriteCount(favoriteService.query().eq("video_id",video.getId()).count());
         // 是否点赞
-        video.setIsFavorite(true);
+        Integer count = favoriteService.query()
+                .eq("video_id", video.getId())
+                .eq("user_id", curUserId).count();
+        video.setIsFavorite(count > 0 ? true : false);
     }
 
-    public void videoWithUser(User user, Integer userId,  Integer curUserId) {
-        //粉丝数
-        user.setFollowerCount(1);
-        //喜欢数
-        user.setFavoriteCount(1);
-        //关注数
-        user.setFollowCount(1);
-        //作品数
-        user.setWorkCount(1);
-        // 是否关注
-        user.setFollow(true);
-    }
 }

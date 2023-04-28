@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.annotation.Resource;
+
 /**
  * <p>
  * 
@@ -115,7 +117,10 @@ public class User implements Serializable {
     @TableField(exist = false)
     private Integer favoriteCount;
 
-
-
-
+    /**
+     * 获赞数量
+     */
+    @JsonProperty("total_favorited")
+    @TableField(exist = false)
+    private Integer totalFavorited;
 }

@@ -65,20 +65,11 @@ public class UserController {
     }
 
     @GetMapping
-    public Result userInfo(@RequestParam("user_id") Integer userId) {
-        System.out.println(userId);
+    public Result userInfo(@RequestParam("user_id") Integer userId,
+                           @RequestParam("token") String token) {
+        Integer curUserId = Integer.parseInt(JWTUtils.getMemberIdByJwtToken(token));
         User user = userService.getById(userId);
-        // TODO 数据从redis中获取
-        //粉丝数
-        user.setFollowerCount(1);
-        //喜欢数
-        user.setFavoriteCount(1);
-        //关注数
-        user.setFollowCount(1);
-        //作品数
-        user.setWorkCount(1);
-        // 是否关注
-        user.setFollow(true);
+        userService.userInfo(user, userId, curUserId);
         return Result.ok("user", user);
     }
 

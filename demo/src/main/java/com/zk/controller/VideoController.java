@@ -6,11 +6,14 @@ import com.zk.pojo.Video;
 import com.zk.service.VideoService;
 import com.zk.utils.AliyunOSS;
 import com.zk.utils.JWTUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+
+import static com.zk.utils.RedisConstants.USER_VIDEO_KEY;
 
 /**
  * <p>
@@ -26,6 +29,9 @@ public class VideoController {
     @Resource
     VideoService videoService;
 
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
+
     @PostMapping("/publish/action")
     public Result action(@RequestParam("token") String token,
                          @RequestParam("data") MultipartFile file,
@@ -40,8 +46,12 @@ public class VideoController {
         video.setPlayUrl(url);
         String userId = JWTUtils.getMemberIdByJwtToken(token);
         video.setUserId(Integer.parseInt(userId));
-        videoService.save(video);
-        // TODO 存入redis
+        boolean isSuccess = videoService.save(video);
+        if (isSuccess) {
+            stringRedisTemplate.opsForSet()
+                    .add(USER_VIDEO_KEY + userId, video.getId().toString());
+        }
+
         return Result.ok();
     }
 

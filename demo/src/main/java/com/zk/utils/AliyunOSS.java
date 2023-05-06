@@ -16,7 +16,13 @@ import java.util.UUID;
  * @date 2023/4/24
  */
 public class AliyunOSS {
-
+    // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
+    String endpoint = "oss-cn-beijing.aliyuncs.com";
+    // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
+    String accessKeyId = "LTAI5tHmyLc1yRVH3jrL1nMz";
+    String accessKeySecret = "sxEMdwlD0FZuOZDI3cngJuvbVELCZe";
+    // 填写Bucket名称，例如examplebucket。
+    String bucketName = "douyin000";
 
     public String fileUpload(MultipartFile multipartFile) {
         String filename = multipartFile.getOriginalFilename();

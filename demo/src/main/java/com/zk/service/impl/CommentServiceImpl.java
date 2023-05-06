@@ -8,10 +8,13 @@ import com.zk.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zk.service.UserService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.zk.utils.RedisConstants.VIDEO_COMMENT_KEY;
 
 /**
  * <p>
@@ -27,6 +30,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Resource
     @Lazy
     UserService userService;
+
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
+
     @Override
     public Result commentList(Integer curUserId, Integer videoId) {
         List<Comment> commentList = query().eq("video_id", videoId).list();
@@ -46,14 +53,24 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             comment.setUserId(userId);
             comment.setComment(commentText);
             comment.setVideoId(Integer.parseInt(videoId));
-            save(comment);
+            boolean isSuccess = save(comment);
+            if (isSuccess) {
+                stringRedisTemplate.opsForSet()
+                        .add(VIDEO_COMMENT_KEY + videoId,
+                                comment.getId().toString());
+            }
             User user = userService.getById(comment.getUserId());
             userService.userInfo(user, comment.getUserId(), userId);
             comment.setUser(user);
             return Result.ok("comment", comment);
         } else if ("2".equals(actionType)) {
             // 删除评论
-            removeById(commentId);
+            boolean isSuccess = removeById(commentId);
+            if (isSuccess) {
+                stringRedisTemplate.opsForSet()
+                        .remove(VIDEO_COMMENT_KEY + videoId,
+                                commentId.toString());
+            }
             return Result.ok("comment", null);
         } else {
             return Result.fail();

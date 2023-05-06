@@ -1,5 +1,5 @@
 server:
-  port: 8000
+  port: 1000
 
 spring:
   application:
@@ -12,6 +12,14 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+  redis:
+    host: 192.168.10.69
+    port: 6380
+    lettuce:
+      pool:
+        max-idle: 16 #redis连接池配置-最大保持闲置的连接数
+        max-active: 20 #redis连接池配置-最大活跃的连接数
+        max-wait: 1 #redis连接池配置-最大等待时间，单位毫秒
 logging:
   level:
     root: warn

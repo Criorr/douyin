@@ -11,7 +11,7 @@ target/
 *.iws
 *.iml
 *.ipr
-com/zk/utils/AliyunOSS.java
+AliyunOSS.java
 ### Eclipse ###
 .apt_generated
 .classpath

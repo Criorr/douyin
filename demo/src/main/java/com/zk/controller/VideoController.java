@@ -39,11 +39,12 @@ public class VideoController {
         if (file == null || file.isEmpty()) {
             return Result.fail();
         }
-        AliyunOSS aliyunOSS = new AliyunOSS();
-        String url = aliyunOSS.fileUpload(file);
+        String playUrl = AliyunOSS.fileUpload(file);
+        String coverUrl = AliyunOSS.videoSnapshot(playUrl);
         Video video = new Video();
         video.setTitle(title);
-        video.setPlayUrl(url);
+        video.setPlayUrl(playUrl);
+        video.setCoverUrl(coverUrl);
         String userId = JWTUtils.getMemberIdByJwtToken(token);
         video.setUserId(Integer.parseInt(userId));
         boolean isSuccess = videoService.save(video);

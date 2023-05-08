@@ -143,10 +143,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public Result favoriteList(Integer curUserId, int userId) {
         List<Integer> videoIds = favoriteService.query()
-                .eq("user_id", userId).list()
+                .eq("user_id", userId)
+                .eq("deleted", 0).list()
                 .stream().map(Favorite::getVideoId)
                 .collect(Collectors.toList());
-
+        if (videoIds == null || videoIds.isEmpty()) {
+            return Result.ok("video_list",null);
+    }
         List<Video> videoList = query().in("id",videoIds).list();
         if (videoList == null || videoList.isEmpty()) {
             return Result.ok("video_list", null);

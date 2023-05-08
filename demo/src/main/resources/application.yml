@@ -11,9 +11,10 @@ spring:
     url: jdbc:mysql://bt.vacant.zone:3306/heiren?useSSL=false
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 1000MB
+      max-request-size: 1000MB
   redis:
-    host: 192.168.10.69
+    host: 192.168.10.71
     port: 6380
     lettuce:
       pool:
@@ -21,7 +22,7 @@ spring:
         max-active: 20 #redis连接池配置-最大活跃的连接数
         max-wait: 1 #redis连接池配置-最大等待时间，单位毫秒
   rabbitmq:
-    host: 192.168.10.69
+    host: 192.168.10.71
     port: 5672
     username: guest
     password: guest

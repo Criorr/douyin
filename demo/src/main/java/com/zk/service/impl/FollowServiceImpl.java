@@ -88,22 +88,14 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         String key = FOLLOWS_KEY + userId;
         // 用户关注列表id
         Set<String> ids = stringRedisTemplate.opsForSet().members(key);
-//        List<Follow> followList = query()
-//                .eq("user_id", userId)
-//                .eq("deleted", 0).list();
+        if (ids == null || ids.isEmpty()) {
+            return Result.ok("user_list", null);
+        }
         List<User> userList = userService.query().in("id", ids).list();
         for (User user : userList) {
             // 填充该用户的信息
             userService.userInfo(user, userId, curUserId);
         }
-//        // 遍历关注列表
-//        for (Follow follow : followList) {
-//            // 关注的用户
-//            User user = userService.getById(follow.getFollowedUserId());
-//            // 填充该用户的信息
-//            userService.userInfo(user, userId, curUserId);
-//            userList.add(user);
-//        }
         return Result.ok("user_list", userList);
     }
 

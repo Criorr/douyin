@@ -1,14 +1,22 @@
 package com.zk;
 
 import cn.hutool.core.date.DateTime;
+import com.aliyun.oss.HttpMethod;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 import com.zk.pojo.*;
 import com.zk.service.*;
+import com.zk.utils.AliyunOSS;
+import org.bytedeco.javacv.FrameGrabber;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
 import javax.annotation.Resource;
+import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -138,6 +146,21 @@ class DemoApplicationTests {
                     .add(VIDEO_COMMENT_KEY + videoId,
                             commentId.toString());
         }
+    }
+
+    /**
+     * 视频截取第一帧
+     */
+
+    @Test
+    public void videoSnapshot() throws FrameGrabber.Exception {
+        String objectName = "https://douyin000.oss-cn-beijing.aliyuncs.com/9.mp4";
+//        String fileName = objectName.substring(objectName.lastIndexOf("/") + 1);
+//        String targetFileName = fileName.substring(0, fileName.lastIndexOf(".")) + ".jpg";
+//        System.out.println(targetFileName);
+        AliyunOSS aliyunOSS = new AliyunOSS();
+        String path = aliyunOSS.videoSnapshot(objectName);
+        System.out.println(path);
     }
 
 }
